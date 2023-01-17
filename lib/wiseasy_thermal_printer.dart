@@ -9,8 +9,18 @@ class WiseasyThermalPrinter {
     return WiseasyThermalPrinterPlatform.instance.initializePrinter();
   }
 
-  Future<String?> startPrint() {
-    return WiseasyThermalPrinterPlatform.instance.startPrinting();
+  Future<String?> printSample() {
+    return WiseasyThermalPrinterPlatform.instance.printSample();
+  }
+
+  Future<String?> paperFeed(int distance) {
+    return WiseasyThermalPrinterPlatform.instance.paperFeed(distance);
+  }
+
+  Future<String?> printLine(
+      String text, fontSize, String align, bool bold, bool italic) {
+    return WiseasyThermalPrinterPlatform.instance
+        .printLine(text, fontSize, align, bold, italic);
   }
 
   Future<String?> stopPrint() {

@@ -32,8 +32,17 @@ abstract class WiseasyThermalPrinterPlatform extends PlatformInterface {
     throw UnimplementedError('initializePrinter() has not been implemented.');
   }
 
-  Future<String?> startPrinting() {
-    throw UnimplementedError('startPrinting() has not been implemented.');
+  Future<String?> printSample() {
+    throw UnimplementedError('printSample() has not been implemented.');
+  }
+
+  Future<String?> paperFeed(int distance) {
+    throw UnimplementedError('printFeed() has not been implemented.');
+  }
+
+  Future<String?> printLine(
+      String text, fontSize, String align, bool bold, bool italic) {
+    throw UnimplementedError('printLine() has not been implemented.');
   }
 
   Future<String?> stopPrint() {

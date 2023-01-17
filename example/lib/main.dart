@@ -1,3 +1,6 @@
+import 'dart:ui';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -5,6 +8,8 @@ import 'package:flutter/services.dart';
 import 'package:wiseasy_thermal_printer/wiseasy_thermal_printer.dart';
 
 void main() {
+  DartPluginRegistrant.ensureInitialized();
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MyApp());
 }
 
@@ -53,7 +58,7 @@ class _MyAppState extends State<MyApp> {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Plugin example app'),
+          title: const Text('Flutter Wiseasy Test'),
         ),
         body: Column(
           children: [
@@ -61,18 +66,68 @@ class _MyAppState extends State<MyApp> {
               child: Text('Running on: $_platformVersion\n'),
             ),
             ElevatedButton(
-                onPressed: () {
-                  _wiseasyThermalPrinterPlugin.initPrinter();
+                onPressed: () async {
+                  var res = await _wiseasyThermalPrinterPlugin.initPrinter();
+                  if (kDebugMode) {
+                    print(res);
+                  }
                 },
-                child: const Text("Init printer")),
+                child: const Text("Initialize printer")),
             ElevatedButton(
-                onPressed: () {
-                  _wiseasyThermalPrinterPlugin.startPrint();
+                onPressed: () async {
+                  var res = await _wiseasyThermalPrinterPlugin.printSample();
+                  if (kDebugMode) {
+                    print(res);
+                  }
                 },
-                child: const Text("Start printing")),
+                child: const Text("Print Sample Receipt")),
             ElevatedButton(
-                onPressed: () {
-                  _wiseasyThermalPrinterPlugin.stopPrint();
+                onPressed: () async {
+                  var res = await _wiseasyThermalPrinterPlugin.paperFeed(10);
+                  if (kDebugMode) {
+                    print(res);
+                  }
+                },
+                child: const Text("PaperFeed - 10 Units")),
+            ElevatedButton(
+                onPressed: () async {
+                  var res = await _wiseasyThermalPrinterPlugin.paperFeed(100);
+                  if (kDebugMode) {
+                    print(res);
+                  }
+                },
+                child: const Text("PaperFeed - 100 Units")),
+            ElevatedButton(
+                onPressed: () async {
+                  var res = await _wiseasyThermalPrinterPlugin.printLine(
+                      "Hello GiftMe", 25, "left", false, false);
+                  if (kDebugMode) {
+                    print(res);
+                  }
+                  res = await _wiseasyThermalPrinterPlugin.printLine(
+                      "Hello GiftMe", 35, "center", false, true);
+                  if (kDebugMode) {
+                    print(res);
+                  }
+
+                  res = await _wiseasyThermalPrinterPlugin.printLine(
+                      "Hello GiftMe", 45, "right", true, false);
+                  if (kDebugMode) {
+                    print(res);
+                  }
+
+                  res = await _wiseasyThermalPrinterPlugin.paperFeed(100);
+                  if (kDebugMode) {
+                    print(res);
+                  }
+                },
+                child: const Text("Print format test")),
+            ElevatedButton(
+                onPressed: () async {
+                  var res = await _wiseasyThermalPrinterPlugin.stopPrint();
+                  if (kDebugMode) {
+                    print(res);
+                  }
                 },
                 child: const Text("Stop printer")),
           ],

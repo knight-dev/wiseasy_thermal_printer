@@ -18,19 +18,39 @@ class MethodChannelWiseasyThermalPrinter extends WiseasyThermalPrinterPlatform {
 
   @override
   Future<String?> initializePrinter() async {
-    final response = await methodChannel.invokeMethod<String>('initPrinter');
+    final response = await methodChannel.invokeMethod('initPrinter');
     return response;
   }
 
   @override
-  Future<String?> startPrinting() async {
-    final response = await methodChannel.invokeMethod<String>('startPrinting');
+  Future<String?> printSample() async {
+    final response = await methodChannel.invokeMethod('printSample');
+    return response;
+  }
+
+  @override
+  Future<String?> paperFeed(int distance) async {
+    final response =
+        await methodChannel.invokeMethod('paperFeed', {'distance': distance});
+    return response;
+  }
+
+  @override
+  Future<String?> printLine(
+      String text, fontSize, String align, bool bold, bool italic) async {
+    final response = await methodChannel.invokeMethod('printLine', {
+      'text': text,
+      'fontSize': fontSize,
+      'align': align.toLowerCase(),
+      'bold': bold,
+      'italic': italic
+    });
     return response;
   }
 
   @override
   Future<String?> stopPrint() async {
-    final response = await methodChannel.invokeMethod<String>('stopPrint');
+    final response = await methodChannel.invokeMethod('stopPrint');
     return response;
   }
 }
