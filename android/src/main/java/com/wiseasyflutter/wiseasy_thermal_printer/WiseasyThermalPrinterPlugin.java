@@ -3,6 +3,8 @@ package com.wiseasyflutter.wiseasy_thermal_printer;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
+import android.os.Handler;
+import android.os.Looper;
 
 import io.flutter.embedding.engine.plugins.FlutterPlugin;
 import io.flutter.embedding.engine.plugins.activity.ActivityAware;
@@ -12,6 +14,10 @@ import io.flutter.plugin.common.MethodCall;
 import io.flutter.plugin.common.MethodChannel;
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler;
 import io.flutter.plugin.common.MethodChannel.Result;
+
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.util.Map;
 
 /** WiseasyThermalPrinterPlugin */
 public class WiseasyThermalPrinterPlugin implements FlutterPlugin, MethodCallHandler {
@@ -41,63 +47,146 @@ public class WiseasyThermalPrinterPlugin implements FlutterPlugin, MethodCallHan
   }
 
   @Override
-  public void onMethodCall(@NonNull MethodCall call, @NonNull Result result) {
-    if (call.method.equals("getPlatformVersion")) {
-      result.success("Android " + android.os.Build.VERSION.RELEASE);
-    } else {
-      result.notImplemented();
-    }
+  public void onMethodCall(@NonNull MethodCall call, @NonNull Result rawResult) {
+    Result result = new MethodResultWrapper(rawResult);
+    final Map<String, Object> arguments = call.arguments();
 
-    // initialize printer
-    if (call.method.equals("initPrinter")) {
-      int response = wiseasyPrint.initPrint();
-      if(response != -1){
-        result.success("Printer initialized successfully!");
-      }else{
-        result.error("FAILED", "Failed to initialize printer.", null);
-      }
-      return;
-    } else {
-      result.notImplemented();
-    }
+    switch (call.method) {
 
-    // start print
-    if (call.method.equals("startPrinting")) {
-      int response = wiseasyPrint.startPrint();
-      if(response != -1){
-        result.success("Printing started successfully!");
-      }else{
-        result.error("FAILED", "Failed to start printing.", null);
-      }
-      return;
-    } else {
-      result.notImplemented();
-    }
+      case "getPlatformVersion":
+        result.success("Android " + android.os.Build.VERSION.RELEASE);
+        break;
 
-    // finish print
-    // initialize printer
-    if (call.method.equals("stopPrint")) {
-      int response = wiseasyPrint.finishPrint();
-      if(response != -1){
-        result.success("Print finish successful!");
-      }else{
-        result.error("FAILED", "Failed to stop printing.", null);
-      }
-      return;
-    } else {
-      result.notImplemented();
+      case "initPrinter":
+        try {
+          int response = wiseasyPrint.initPrint();
+          if(response != -1){
+            result.success("Printer initialized successfully!");
+          }else{
+            result.error("FAILED", "Failed to initialize printer.", null);
+          }
+        } catch (Exception ex) {
+          result.error("Error", ex.getMessage(), exceptionToString(ex));
+        }
+        break;
+
+      case "printSample":
+        try {
+          int response = wiseasyPrint.printSample();
+          if(response != -1){
+            result.success("Print sample started successfully!");
+          }else{
+            result.error("FAILED", "Failed to start printing.", null);
+          }
+        } catch (Exception ex) {
+          result.error("Error", ex.getMessage(), exceptionToString(ex));
+        }
+        break;
+
+      case "stopPrint":
+        try {
+          int response = wiseasyPrint.finishPrint();
+          if(response != -1){
+            result.success("Print finish successful!");
+          }else{
+            result.error("FAILED", "Failed to stop printing.", null);
+          }
+        } catch (Exception ex) {
+          result.error("Error", ex.getMessage(), exceptionToString(ex));
+        }
+        break;
+
+      case "paperFeed":
+        if (arguments.containsKey("distance")) {
+          // how far to print blank page
+          int size = (int) arguments.get("distance");
+          int response = wiseasyPrint.paperFeed(size);
+          if(response != -1){
+            result.success("Paper feed successful!");
+          }else{
+            result.error("FAILED", "Failed paper feed.", null);
+          }
+        } else {
+          result.error("invalid", "argument 'distance' not found", null);
+        }
+        break;
+
+       case "printLine":
+          if (arguments.containsKey("text")) {
+
+            // get arguments
+            String text = (String) arguments.get("text");
+            int fontSize = (int) arguments.get("fontSize");
+            String align = (String) arguments.get("align");
+            Boolean bold = (Boolean) arguments.get("bold");
+            Boolean italic = (Boolean) arguments.get("italic");
+
+            int response = wiseasyPrint.printLine(text, fontSize, align, bold, italic);
+            if(response != -1){
+              result.success("Print line successful!");
+            }else{
+              result.error("FAILED", "Failed to print line.", null);
+            }
+          } else {
+            result.error("invalid", "argument 'text' not found", null);
+          }
+        break;
+      default:
+        result.notImplemented();
+        break;
     }
   }
-
-//  @Override
-//  public void onAttachedToActivity(@NonNull ActivityPluginBinding binding) {
-//    activityBinding = binding;
-//    wiseasyPrint = new WiseasyPrint();
-//    wiseasyPrint.startPrintThread();
-//  }
 
   @Override
   public void onDetachedFromEngine(@NonNull FlutterPluginBinding binding) {
     channel.setMethodCallHandler(null);
+  }
+
+  // MethodChannel.Result wrapper that responds on the platform thread.
+  private static class MethodResultWrapper implements Result {
+    private Result methodResult;
+    private Handler handler;
+
+    MethodResultWrapper(Result result) {
+      methodResult = result;
+      handler = new Handler(Looper.getMainLooper());
+    }
+
+    @Override
+    public void success(final Object result) {
+      handler.post(new Runnable() {
+        @Override
+        public void run() {
+          methodResult.success(result);
+        }
+      });
+    }
+
+    @Override
+    public void error(final String errorCode, final String errorMessage, final Object errorDetails) {
+      handler.post(new Runnable() {
+        @Override
+        public void run() {
+          methodResult.error(errorCode, errorMessage, errorDetails);
+        }
+      });
+    }
+
+    @Override
+    public void notImplemented() {
+      handler.post(new Runnable() {
+        @Override
+        public void run() {
+          methodResult.notImplemented();
+        }
+      });
+    }
+  }
+
+  private String exceptionToString(Exception ex) {
+    StringWriter sw = new StringWriter();
+    PrintWriter pw = new PrintWriter(sw);
+    ex.printStackTrace(pw);
+    return sw.toString();
   }
 }

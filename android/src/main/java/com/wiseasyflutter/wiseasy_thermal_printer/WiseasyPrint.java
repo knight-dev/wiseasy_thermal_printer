@@ -73,7 +73,37 @@ public class WiseasyPrint extends Activity{
         return result;
     }
 
-    public int startPrint() {
+    public int paperFeed(int distance){
+        int result = -1;
+        try{
+        mPrinter.printPaper(distance);
+        result = 1;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public int printLine(String text, int fontSize, String alignment, boolean bold, boolean italic){
+        int result = -1;
+        try{
+            // set print alignment
+            Printer.Align align = Printer.Align.LEFT;
+            if(alignment.equals("center")){
+                align = Printer.Align.CENTER;
+            }
+            if(alignment.equals("right")){
+                align = Printer.Align.RIGHT;
+            }
+            mPrinter.printString(text, fontSize, align, bold, italic);
+            result = 1;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public int printSample() {
         int[] status = new int[1];
         status[0] = -1;
         try {
