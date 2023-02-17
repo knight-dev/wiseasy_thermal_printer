@@ -1,7 +1,8 @@
 name: wiseasy_thermal_printer
 description: Flutter plugin to access Wiseasy device printer native functions.
 version: 0.0.1
-homepage:
+homepage: https://github.com/knight-dev/wiseasy_thermal_printer
+repository: https://github.com/knight-dev/wiseasy_thermal_printer
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
