@@ -40,6 +40,12 @@ class MockWiseasyThermalPrinterPlatform
     // TODO: implement stopPrint
     throw UnimplementedError();
   }
+
+  @override
+  Future<String?> printLeftRight(String text1, String text2, fontSize, String align, bool bold, bool italic) {
+    // TODO: implement printLeftRight
+    throw UnimplementedError();
+  }
 }
 
 void main() {

@@ -122,6 +122,7 @@ public class WiseasyThermalPrinterPlugin implements FlutterPlugin, MethodCallHan
             Boolean italic = (Boolean) arguments.get("italic");
 
             int response = wiseasyPrint.printLine(text, fontSize, align, bold, italic);
+
             if(response != -1){
               result.success("Print line successful!");
             }else{
@@ -130,6 +131,28 @@ public class WiseasyThermalPrinterPlugin implements FlutterPlugin, MethodCallHan
           } else {
             result.error("invalid", "argument 'text' not found", null);
           }
+        break;
+      case "printLeftRight":
+        if (arguments.containsKey("text1")) {
+
+          // get arguments
+          String text1 = (String) arguments.get("text1");
+          String text2 = (String) arguments.get("text2");
+          int fontSize = (int) arguments.get("fontSize");
+          String align = (String) arguments.get("align");
+          Boolean bold = (Boolean) arguments.get("bold");
+          Boolean italic = (Boolean) arguments.get("italic");
+
+          int response = wiseasyPrint.printLeftRight(text1,text2, fontSize, align, bold, italic);
+
+          if(response != -1){
+            result.success("Print LeftRight successful!");
+          }else{
+            result.error("FAILED", "Failed to print LeftRight.", null);
+          }
+        } else {
+          result.error("invalid", "argument 'text' not found", null);
+        }
         break;
       default:
         result.notImplemented();

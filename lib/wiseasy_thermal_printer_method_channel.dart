@@ -47,6 +47,19 @@ class MethodChannelWiseasyThermalPrinter extends WiseasyThermalPrinterPlatform {
     });
     return response;
   }
+  @override
+  Future<String?> printLeftRight(
+      String text1,String text2, fontSize, String align, bool bold, bool italic) async {
+    final response = await methodChannel.invokeMethod('printLeftRight', {
+      'text1': text1,
+      'text2': text2,
+      'fontSize': fontSize,
+      'align': align.toLowerCase(),
+      'bold': bold,
+      'italic': italic
+    });
+    return response;
+  }
 
   @override
   Future<String?> stopPrint() async {

@@ -96,6 +96,29 @@ public class WiseasyPrint extends Activity{
                 align = Printer.Align.RIGHT;
             }
             mPrinter.printString(text, fontSize, align, bold, italic);
+
+
+            result = 1;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public int printLeftRight(String text1,String text2, int fontSize, String alignment, boolean bold, boolean italic){
+        int result = -1;
+        try{
+            // set print alignment
+            Printer.Align align = Printer.Align.LEFT;
+            if(alignment.equals("center")){
+                align = Printer.Align.CENTER;
+            }
+            if(alignment.equals("right")){
+                align = Printer.Align.RIGHT;
+            }
+            mPrinter.print2StringInLine(text1,text2,30,Printer.Font.SERIF,fontSize, align, bold, italic,false);
+
+
+
             result = 1;
         } catch (RemoteException e) {
             e.printStackTrace();

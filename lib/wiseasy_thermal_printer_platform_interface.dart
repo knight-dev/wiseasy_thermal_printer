@@ -43,6 +43,9 @@ abstract class WiseasyThermalPrinterPlatform extends PlatformInterface {
   Future<String?> printLine(
       String text, fontSize, String align, bool bold, bool italic) {
     throw UnimplementedError('printLine() has not been implemented.');
+  }Future<String?> printLeftRight(
+      String text1,String text2, fontSize, String align, bool bold, bool italic) {
+    throw UnimplementedError('printLeftRight() has not been implemented.');
   }
 
   Future<String?> stopPrint() {
