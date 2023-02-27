@@ -10,6 +10,36 @@ class MockWiseasyThermalPrinterPlatform
 
   @override
   Future<String?> getPlatformVersion() => Future.value('42');
+
+  @override
+  Future<String?> initializePrinter() {
+    // TODO: implement initializePrinter
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String?> paperFeed(int distance) {
+    // TODO: implement paperFeed
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String?> printLine(String text, fontSize, String align, bool bold, bool italic) {
+    // TODO: implement printLine
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String?> printSample() {
+    // TODO: implement printSample
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String?> stopPrint() {
+    // TODO: implement stopPrint
+    throw UnimplementedError();
+  }
 }
 
 void main() {
