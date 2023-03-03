@@ -115,7 +115,7 @@ public class WiseasyPrint extends Activity{
             if(alignment.equals("right")){
                 align = Printer.Align.RIGHT;
             }
-            mPrinter.print2StringInLine(text1,text2,0,Printer.Font.SERIF,fontSize, align, bold, italic,false);
+            mPrinter.print2StringInLine(text1,text2,2,Printer.Font.SERIF,fontSize, align, bold, italic,false);
 
 
 
