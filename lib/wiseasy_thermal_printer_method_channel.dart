@@ -60,7 +60,11 @@ class MethodChannelWiseasyThermalPrinter extends WiseasyThermalPrinterPlatform {
     });
     return response;
   }
-
+  @override
+  Future<String?> papercut() async {
+    final response = await methodChannel.invokeMethod('paperCut');
+    return response;
+  }
   @override
   Future<String?> stopPrint() async {
     final response = await methodChannel.invokeMethod('stopPrint');

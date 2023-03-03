@@ -27,7 +27,9 @@ class WiseasyThermalPrinter {
     return WiseasyThermalPrinterPlatform.instance
         .printLeftRight(text1,text2 ,fontSize, align, bold, italic);
   }
-
+  Future<String?> paperCut() {
+    return WiseasyThermalPrinterPlatform.instance.paperCut();
+  }
   Future<String?> stopPrint() {
     return WiseasyThermalPrinterPlatform.instance.stopPrint();
   }

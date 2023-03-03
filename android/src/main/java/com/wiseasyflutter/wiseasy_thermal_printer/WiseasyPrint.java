@@ -72,6 +72,15 @@ public class WiseasyPrint extends Activity{
         }
         return result;
     }
+    public int paperCut() {
+        int result = -1;
+        try {
+            result = mPrinter.cutPaper();
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 
     public int paperFeed(int distance){
         int result = -1;
@@ -115,7 +124,7 @@ public class WiseasyPrint extends Activity{
             if(alignment.equals("right")){
                 align = Printer.Align.RIGHT;
             }
-            mPrinter.print2StringInLine(text1,text2,2,Printer.Font.SERIF,fontSize, align, bold, italic,false);
+            mPrinter.print2StringInLine(text1,text2,1,Printer.Font.SERIF,fontSize, align, bold, italic,false);
 
 
 

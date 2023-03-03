@@ -47,7 +47,9 @@ abstract class WiseasyThermalPrinterPlatform extends PlatformInterface {
       String text1,String text2, fontSize, String align, bool bold, bool italic) {
     throw UnimplementedError('printLeftRight() has not been implemented.');
   }
-
+  Future<String?> paperCut() {
+    throw UnimplementedError('paperCut() has not been implemented.');
+  }
   Future<String?> stopPrint() {
     throw UnimplementedError('stopPrint() has not been implemented.');
   }

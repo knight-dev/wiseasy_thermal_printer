@@ -95,6 +95,18 @@ public class WiseasyThermalPrinterPlugin implements FlutterPlugin, MethodCallHan
           result.error("Error", ex.getMessage(), exceptionToString(ex));
         }
         break;
+      case "paperCut":
+        try {
+          int response = wiseasyPrint.paperCut();
+          if(response != -1){
+            result.success(" Paper Successfully Cut!");
+          }else{
+            result.error("FAILED", "Failed to stop paper cut.", null);
+          }
+        } catch (Exception ex) {
+          result.error("Error", ex.getMessage(), exceptionToString(ex));
+        }
+        break;
 
       case "paperFeed":
         if (arguments.containsKey("distance")) {
