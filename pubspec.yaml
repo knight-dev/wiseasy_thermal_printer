@@ -5,7 +5,7 @@ homepage: https://github.com/knight-dev/wiseasy_thermal_printer
 repository: https://github.com/knight-dev/wiseasy_thermal_printer
 
 environment:
-  sdk: '>=2.7.0 <3.0.0'
+  sdk: '>=2.12.0 <3.0.0'
   flutter: ">=2.5.0"
 
 dependencies:
